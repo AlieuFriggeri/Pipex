@@ -8,7 +8,22 @@ size_t ft_strlen(char *str)
     return (i);
 }
 
-int main (int ac, char* av[])
+char    *testPath(char **paths, char *cmd)
+{
+    int i;
+    char *tmp;
+
+    while(paths[i] != NULL)
+    {
+        tmp = ft_strjoin(paths[i], cmd);
+        if (access(tmp, F_OK) == 0)
+            break;
+        i++;
+    }
+    return tmp;
+}
+
+int main (int ac, char* av[], char *envp[])
 {
     int id;
     int fd[2];
