@@ -6,7 +6,7 @@
 /*   By: afrigger <afrigger@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 13:00:35 by afrigger          #+#    #+#             */
-/*   Updated: 2022/11/29 13:47:40 by afrigger         ###   ########.fr       */
+/*   Updated: 2022/11/29 15:40:14 by afrigger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,12 @@ int main (int ac, char* av[], char *envp[])
 	t_pipe pipex;
 	t_pipe pipex2;
 
-	splitpath(envp, &pipex);
-	set_args(&pipex, av[2]);
-	testpath(&pipex);
-	splitpath(envp, &pipex2);
-	set_args(&pipex2, av[3]);
-	testpath(&pipex2);
+	// splitpath(envp, &pipex);
+	// set_args(&pipex, av[2]);
+	// testpath(&pipex);
+	// splitpath(envp, &pipex2);
+	// set_args(&pipex2, av[3]);
+	// testpath(&pipex2);
 	//ft_vector(&pipex);
 	(void)ac;
 	// char *array[] =
@@ -69,27 +69,25 @@ int main (int ac, char* av[], char *envp[])
 	//     pipex.cmd1_args[1],
 	// 	NULL
 	// };
-	ft_printf("execve cmd is %s\n", pipex.cmd1);
-	ft_printf("execve path is %s\n", pipex.pathok);
-	ft_printf("execve args are %s %s %s %s\n", pipex.cmd1_args[0], pipex.cmd1_args[1], pipex.cmd1_args[2], pipex.cmd1_args[3]);
-	ft_printf("execve2 cmd is %s\n", pipex2.cmd1);
-	ft_printf("execve2 path is %s\n", pipex2.pathok);
-	ft_printf("execve2 args are %s %s %s %s\n", pipex2.cmd1_args[0], pipex2.cmd1_args[1], pipex2.cmd1_args[2], pipex2.cmd1_args[3]);
-	printf("lol jsuis apres le cat et le grep mdr\n");
+	// TEST D'AFFICHAGE DES ARGUMENTS
+	// ft_printf("execve cmd is %s\n", pipex.cmd1);
+	// ft_printf("execve path is %s\n", pipex.pathok);
+	// ft_printf("execve args are %s %s %s %s\n", pipex.cmd1_args[0], pipex.cmd1_args[1], pipex.cmd1_args[2], pipex.cmd1_args[3]);
+	// ft_printf("execve2 cmd is %s\n", pipex2.cmd1);
+	// ft_printf("execve2 path is %s\n", pipex2.pathok);
+	// ft_printf("execve2 args are %s %s %s %s\n", pipex2.cmd1_args[0], pipex2.cmd1_args[1], pipex2.cmd1_args[2], pipex2.cmd1_args[3]);
+	int fd[2];
+	pipe(fd);
 	pipex.id = fork();
 	if (pipex.id == 0)
-	{
-		execve(pipex.pathok, pipex.cmd1_args, envp);
-	}
+		firstchild(&pipex, envp, av, fd);
 	waitpid(pipex.id, NULL, 0);
-	printf("ca a marcher");
+	printf("ca a marcher\n");
 	pipex2.id = fork();
 	if(pipex2.id == 0)
-	{
-		execve(pipex2.pathok, pipex2.cmd1_args, envp);
-	}
+		secondchild(&pipex2, envp, av, fd);
 	waitpid(pipex2.id, NULL, 0);
-	printf("ca a marcher 2");
+	printf("ca a marcher 2\n");
 
 	return 0;
 }

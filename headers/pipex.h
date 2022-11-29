@@ -6,19 +6,19 @@
 /*   By: afrigger <afrigger@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 13:50:18 by afrigger          #+#    #+#             */
-/*   Updated: 2022/11/29 12:53:58 by afrigger         ###   ########.fr       */
+/*   Updated: 2022/11/29 15:40:50 by afrigger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPEX_H
-#define PIPEX_H
+# define PIPEX_H
 
-#include <fcntl.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/wait.h>
-#include "../libft/libft.h"
+# include <fcntl.h>
+# include <unistd.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <sys/wait.h>
+# include "../libft/libft.h"
 
 typedef	struct s_pipe
 {
@@ -32,5 +32,8 @@ typedef	struct s_pipe
 
 void	testpath(t_pipe *pipex);
 void	splitpath(char **envp, t_pipe *pipex);
+void	firstchild(t_pipe *pipex, char **envp, char**args, int fd[2]);
+void	set_args(t_pipe *pipex, char *args);
+void	secondchild(t_pipe *pipex, char **envp, char**args, int fd[2]);
 
 #endif

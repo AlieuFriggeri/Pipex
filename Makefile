@@ -6,7 +6,7 @@
 #    By: afrigger <afrigger@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/03 12:10:58 by afrigger          #+#    #+#              #
-#    Updated: 2022/11/29 12:16:41 by afrigger         ###   ########.fr        #
+#    Updated: 2022/11/29 15:07:56 by afrigger         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,7 @@ FT_LNK = -L ${DIR_LIBFT} -l ft
 
 LIBS = $(FT_LNK) 
 
-SRCS_LIST = pipex.c
+SRCS_LIST = pipex.c firstchild.c
 
 SRCS = $(addprefix $(DIR_S), $(SRCS_LIST))
 
