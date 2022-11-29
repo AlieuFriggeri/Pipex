@@ -14,9 +14,14 @@
 
 void	firstchild(t_pipe *pipex, char **envp, char**args, int fd[2])
 {
+	int stdinput;
+
 	close(fd[0]);
 	dup2(fd[1], 1);
 	close(fd[1]);
+	stdinput = open(args[1], O_RDONLY);
+	dup2(stdinput, 0);
+	close(stdinput);
 	splitpath(envp, pipex);
 	set_args(pipex, args[2]);
 	testpath(pipex);
@@ -24,17 +29,24 @@ void	firstchild(t_pipe *pipex, char **envp, char**args, int fd[2])
 		printf("ERROR IN FIRST CHILD EXEC OCCURED");
 }
 
+/* int	readpipe(char *buffer)
+{
+	while (get_next_line(bite))
+} */
+
 void	secondchild(t_pipe *pipex, char **envp, char**args, int fd[2])
 {
 	char data[1000001];
-	int fd2;
+	int output;
 
-	read(fd[0], data, 1000000);
-	printf("data is %s ok\n", data);
-	fd2 = open(args[4], O_WRONLY | O_CREAT, 0777);
-	dup2(fd2, 1);
+	//read(fd[0], data, 1000000);
+	//printf("data is %s ok\n", data);
+	output = open(args[4], O_WRONLY | O_CREAT, 0777);
+	dup2(output, STDOUT_FILENO);
+	dup2(fd[0], STDIN_FILENO);
 	close(fd[1]);
 	close(fd[0]);
+	close(output);
 	splitpath(envp, pipex);
 	set_args(pipex, args[3]);
 	testpath(pipex);

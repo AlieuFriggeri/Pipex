@@ -47,9 +47,18 @@ void	set_args(t_pipe *pipex, char *args)
 
 	pipex->cmd1_args = ft_split(args, ' ');
 	pipex->cmd1 = pipex->cmd1_args[0];
+ 
 }
+/* void	setfile(t_pipe *pipex, char *args)
+{
+	int i;
 
-
+	i = 0;
+	while (pipex->cmd1_args[i] != NULL)
+		i++;
+	pipex->cmd1_args[i] = ft_strdup(args);
+	pipex->cmd1_args[i + 1] = NULL;
+} */
 int main (int ac, char* av[], char *envp[])
 {
 	t_pipe pipex;
@@ -83,6 +92,7 @@ int main (int ac, char* av[], char *envp[])
 		firstchild(&pipex, envp, av, fd);
 	waitpid(pipex.id, NULL, 0);
 	printf("ca a marcher\n");
+	close(fd[1]);
 	pipex2.id = fork();
 	if(pipex2.id == 0)
 		secondchild(&pipex2, envp, av, fd);
