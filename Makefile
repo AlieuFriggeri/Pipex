@@ -6,7 +6,7 @@
 #    By: afrigger <afrigger@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/03 12:10:58 by afrigger          #+#    #+#              #
-#    Updated: 2022/11/23 13:20:29 by afrigger         ###   ########.fr        #
+#    Updated: 2022/11/29 12:16:41 by afrigger         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ RESET = \033[0m
 NAME = pipex
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -O3
+CFLAGS = -Wall -Wextra -Werror -O3 -g
 RM = rm -f
 
 DIR_H = headers/

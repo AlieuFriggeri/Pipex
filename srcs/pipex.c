@@ -6,109 +6,76 @@
 /*   By: afrigger <afrigger@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 13:00:35 by afrigger          #+#    #+#             */
-/*   Updated: 2022/11/28 15:07:05 by afrigger         ###   ########.fr       */
+/*   Updated: 2022/11/29 13:33:24 by afrigger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-char **splitpath(char **envp)
+void	splitpath(char **envp, t_pipe *pipex)
 {
 	int i;
-	char **paths;
 
 	i = 0;
 	while(ft_strncmp(*envp, "PATH=", 5) != 0)
 		envp++;
-	paths = ft_split(*envp + 5, ':');
-	return (paths);
+	pipex->paths = ft_split(*envp + 5, ':');
 }
 
-char	*testpath(char **paths, char *cmd)
+void	testpath(t_pipe *pipex)
 {
 	int i;
-	char *tmp;
 
 	i = 0;
-	while(paths[i] != NULL)
+	while(pipex->paths[i] != NULL)
 	{
-		tmp = ft_strjoin(paths[i], "/");
-		tmp = ft_strjoin(tmp, cmd);
-		if (access(tmp, F_OK | X_OK) == 0)
+		pipex->pathok = ft_strjoin(pipex->paths[i], "/");
+		pipex->pathok = ft_strjoin(pipex->pathok, pipex->cmd1);
+		if (access(pipex->pathok, F_OK | X_OK) == 0)
 			break;
 		else
-			free(tmp);
+		{
+			free(pipex->pathok);
+			pipex->pathok = NULL;
+		}
 		i++;
 	}
-	return tmp;
 }
 
 void	set_args(t_pipe *pipex, char *args)
 {
-	char **tmp;
-	int i;
-	tmp = ft_split(args, ' ');
-	pipex->cmd1 = tmp[0];
-	//printf("%s\n", tmp[1]);
 
-	i = 1;
-	while (tmp[i] != NULL)
-	{
-		if(pipex->cmd1_args == NULL)
-			pipex->cmd1_args = ft_strjoin("", tmp[i]);
-		else
-		{
-			pipex->cmd1_args = ft_strjoin(pipex->cmd1_args, tmp[i]);
-			pipex->cmd1_args = ft_strjoin(pipex->cmd1_args, " ");
-		}
-		i++;
-	}
-	//printf("%s\n", tmp[1]);
+	pipex->cmd1_args = ft_split(args, ' ');
+	pipex->cmd1 = pipex->cmd1_args[0];
 }
+
 
 int main (int ac, char* av[], char *envp[])
 {
 	t_pipe pipex;
-	int	id;
-	int fd[2];
+	t_pipe pipex2;
 
-	pipex.paths = splitpath(envp);
+	splitpath(envp, &pipex);
 	set_args(&pipex, av[2]);
-	//pipex.cmd1 = av[1];
-	printf("args for are %s\n", pipex.cmd1_args);
-	pipex.pathok = testpath(pipex.paths, pipex.cmd1);
-	printf("args for are %s\n", pipex.cmd1_args);
-	printf("ok path for %s is %s\n", pipex.cmd1, pipex.pathok);
+	testpath(&pipex);
+	splitpath(envp, &pipex2);
+	set_args(&pipex2, av[3]);
+	testpath(&pipex2);
+	//ft_vector(&pipex);
 	(void)ac;
-	
-	printf("args for %s are %s\n", pipex.cmd1, pipex.cmd1_args);
-	return 0;
-	char *array[] =
-	{
-	    pipex.pathok,
-	    av[4],
-	    pipex.cmd1_args,
-	    NULL
-	};
-	id = fork();
-	if(id == 0)
-	{
-		close(fd[0]);
-		dup2(fd[1], 1);
-		execve(pipex.pathok, array, NULL);
-	}
-	else 
-	{
-		wait(NULL);
-		// close(fd[1]);
-		// int nbyte = read(fd[0], grepres, 1000);
-		// close(fd[0]);
-		// int file = open(av[4], O_WRONLY | O_CREAT, 0777);
-		// printf("GREP RESULT IS %s\n", grepres);
-		// write(file, &grepres, nbyte);
-		// printf("lol jsuis apres le grep\n");
-		// execve("//usr/bin/cat", array2, NULL);
-	}
-	  printf("lol jsuis apres le cat et le grep mdr\n");
+	// char *array[] =
+	// {
+	//     pipex.pathok,
+	//     pipex.cmd1_args[1],
+	// 	NULL
+	// };
+	ft_printf("execve cmd is %s\n", pipex.cmd1);
+	ft_printf("execve path is %s\n", pipex.pathok);
+	ft_printf("execve args are %s %s %s %s\n", pipex.cmd1_args[0], pipex.cmd1_args[1], pipex.cmd1_args[2], pipex.cmd1_args[3]);
+	ft_printf("execve2 cmd is %s\n", pipex2.cmd1);
+	ft_printf("execve2 path is %s\n", pipex2.pathok);
+	ft_printf("execve2 args are %s %s %s %s\n", pipex2.cmd1_args[0], pipex2.cmd1_args[1], pipex2.cmd1_args[2], pipex2.cmd1_args[3]);
+	printf("lol jsuis apres le cat et le grep mdr\n");
+
 	return 0;
 }

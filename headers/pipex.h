@@ -6,7 +6,7 @@
 /*   By: afrigger <afrigger@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 13:50:18 by afrigger          #+#    #+#             */
-/*   Updated: 2022/11/28 14:02:11 by afrigger         ###   ########.fr       */
+/*   Updated: 2022/11/29 12:53:58 by afrigger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,15 @@
 
 typedef	struct s_pipe
 {
+	int		id;
 	char	*cmd1;
-	char	*cmd1_args;
-	char	*cmd2;
-	char	*cmd2_args;
-	char	*filein;
-	char	*fileout;
+	char	**cmd1_args;
+	char	*file;
 	char	**paths;
 	char	*pathok;
 }	t_pipe;
 
-char	*testpath(char **paths, char *cmd);
-char	**splitpath(char **envp);
+void	testpath(t_pipe *pipex);
+void	splitpath(char **envp, t_pipe *pipex);
 
 #endif
