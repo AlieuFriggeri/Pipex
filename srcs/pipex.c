@@ -6,7 +6,7 @@
 /*   By: afrigger <afrigger@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 13:00:35 by afrigger          #+#    #+#             */
-/*   Updated: 2022/11/29 13:33:24 by afrigger         ###   ########.fr       */
+/*   Updated: 2022/11/29 13:47:40 by afrigger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,20 @@ int main (int ac, char* av[], char *envp[])
 	ft_printf("execve2 path is %s\n", pipex2.pathok);
 	ft_printf("execve2 args are %s %s %s %s\n", pipex2.cmd1_args[0], pipex2.cmd1_args[1], pipex2.cmd1_args[2], pipex2.cmd1_args[3]);
 	printf("lol jsuis apres le cat et le grep mdr\n");
+	pipex.id = fork();
+	if (pipex.id == 0)
+	{
+		execve(pipex.pathok, pipex.cmd1_args, envp);
+	}
+	waitpid(pipex.id, NULL, 0);
+	printf("ca a marcher");
+	pipex2.id = fork();
+	if(pipex2.id == 0)
+	{
+		execve(pipex2.pathok, pipex2.cmd1_args, envp);
+	}
+	waitpid(pipex2.id, NULL, 0);
+	printf("ca a marcher 2");
 
 	return 0;
 }
