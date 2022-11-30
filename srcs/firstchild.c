@@ -6,15 +6,26 @@
 /*   By: afrigger <afrigger@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 13:49:54 by afrigger          #+#    #+#             */
-/*   Updated: 2022/11/29 16:05:47 by afrigger         ###   ########.fr       */
+/*   Updated: 2022/11/30 15:12:24 by afrigger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/pipex.h"
 
+void	filecheck(char *arg)
+{
+	if (access(arg, F_OK) == -1)
+	{
+		errno = ENOENT;
+		perror(strerror(errno));
+		exit(errno);
+	}
+}
+
 void	firstchild(t_pipe *pipex, char **envp, char**args, int fd[2])
 {
-	int stdinput;
+	int	stdinput;
+	int	error;
 
 	close(fd[0]);
 	dup2(fd[1], 1);
@@ -25,22 +36,18 @@ void	firstchild(t_pipe *pipex, char **envp, char**args, int fd[2])
 	splitpath(envp, pipex);
 	set_args(pipex, args[2]);
 	testpath(pipex);
-	if (execve(pipex->pathok, pipex->cmd1_args, envp) == -1)
-		printf("ERROR IN FIRST CHILD EXEC OCCURED");
+	filecheck(args[1]);
+	error = execve(pipex->pathok, pipex->cmd1_args, envp);
+	if (error == -1)
+		perror(strerror(error));
 }
-
-/* int	readpipe(char *buffer)
-{
-	while (get_next_line(bite))
-} */
 
 void	secondchild(t_pipe *pipex, char **envp, char**args, int fd[2])
 {
-	char data[1000001];
-	int output;
+	int	output;
+	int	error;
 
-	//read(fd[0], data, 1000000);
-	//printf("data is %s ok\n", data);
+	unlink(args[4]);
 	output = open(args[4], O_WRONLY | O_CREAT, 0777);
 	dup2(output, STDOUT_FILENO);
 	dup2(fd[0], STDIN_FILENO);
@@ -50,6 +57,7 @@ void	secondchild(t_pipe *pipex, char **envp, char**args, int fd[2])
 	splitpath(envp, pipex);
 	set_args(pipex, args[3]);
 	testpath(pipex);
-	if (execve(pipex->pathok, pipex->cmd1_args, envp) == -1)
-		printf("ERROR IN SECOND CHILD EXEC OCCURED");
+	error = execve(pipex->pathok, pipex->cmd1_args, envp);
+	if (error == -1)
+		errcheck(pipex);
 }
