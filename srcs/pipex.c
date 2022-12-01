@@ -6,7 +6,7 @@
 /*   By: afrigger <afrigger@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 13:00:35 by afrigger          #+#    #+#             */
-/*   Updated: 2022/11/30 15:15:15 by afrigger         ###   ########.fr       */
+/*   Updated: 2022/12/01 10:32:27 by afrigger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,8 @@ void	errcheck(t_pipe *pipex)
 		pipex->statuscode = WEXITSTATUS(pipex->wstatus);
 	if (pipex->statuscode != 0)
 	{
-		ft_printf("exited with status code %d\n", pipex->statuscode);
 		perror(strerror(pipex->statuscode));
-		exit(0);
+		exit(pipex->statuscode);
 	}
 }
 
@@ -76,14 +75,12 @@ int	main(int ac, char *av[], char *envp[])
 	pipex.id = fork();
 	if (pipex.id == 0)
 		firstchild(&pipex, envp, av, fd);
-	waitpid(pipex.id, &pipex.wstatus, 0);
 	close(fd[1]);
 	pipex2.id = fork();
 	if (pipex2.id == 0)
 		secondchild(&pipex2, envp, av, fd);
+	close(fd[0]);
+	waitpid(pipex.id, &pipex.wstatus, 0);
 	waitpid(pipex2.id, &pipex2.wstatus, 0);
-	//these prints cause problems with the tester (remove them after test)
-	ft_printf("exited with status code %d\n", errno);
-	ft_printf("exited 2 with status code %d\n", pipex2.wstatus);
 	return (0);
 }
