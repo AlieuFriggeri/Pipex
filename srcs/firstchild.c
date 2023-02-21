@@ -6,7 +6,7 @@
 /*   By: afrigger <afrigger@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 13:49:54 by afrigger          #+#    #+#             */
-/*   Updated: 2022/12/01 10:35:33 by afrigger         ###   ########.fr       */
+/*   Updated: 2023/02/21 12:36:48 by afrigger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ void	firstchild(t_pipe *pipex, char **envp, char**args, int fd[2])
 	testpath(pipex);
 	filecheck(args[1]);
 	error = execve(pipex->pathok, pipex->cmd1_args, envp);
-	exit(-1);
+	if (error == -1)
+		errcheck(pipex);
 }
 
 void	secondchild(t_pipe *pipex, char **envp, char**args, int fd[2])
