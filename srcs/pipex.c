@@ -6,7 +6,7 @@
 /*   By: afrigger <afrigger@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 13:00:35 by afrigger          #+#    #+#             */
-/*   Updated: 2023/02/21 12:42:07 by afrigger         ###   ########.fr       */
+/*   Updated: 2023/02/22 11:24:20 by afrigger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,13 @@ void	testpath(t_pipe *pipex)
 	int	i;
 
 	i = 0;
+	if (access(pipex->cmd1, F_OK | X_OK) == 0)
+	{
+		pipex->pathok = pipex->cmd1;
+		return;
+	}
+	else if (pipex->cmd1[0] == '/')
+		filecheck(pipex->cmd1);
 	while (pipex->paths[i] != NULL)
 	{
 		pipex->pathok = ft_strjoin(pipex->paths[i], "/");
@@ -65,7 +72,7 @@ int	main(int ac, char *av[], char *envp[])
 	t_pipe	pipex2;
 	int		fd[2];
 
-	if (ac != 5)
+	if (ac != 5 && ac != 4)
 	{
 		errno = 22;
 		perror(strerror(errno));
