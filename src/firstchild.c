@@ -6,7 +6,7 @@
 /*   By: afrigger <afrigger@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 13:49:54 by afrigger          #+#    #+#             */
-/*   Updated: 2023/02/22 11:41:54 by afrigger         ###   ########.fr       */
+/*   Updated: 2023/02/28 12:12:51 by afrigger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,9 @@ void	filecheck(char *arg)
 	if (access(arg, F_OK) == -1)
 	{
 		errno = ENOENT;
-		perror(strerror(errno));
+		ft_putstr_fd("pipex: ", 2);
+		ft_putstr_fd(arg, 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
 		exit(errno);
 	}
 }
@@ -48,12 +50,13 @@ void	secondchild(t_pipe *pipex, char **envp, char**args, int fd[2])
 {
 	int	output;
 	int	error;
-	if(args[4])
+
+	if (args[4])
 	{
 		unlink(args[4]);
 		output = open(args[4], O_WRONLY | O_CREAT, 0777);
-		dup2(output, STDOUT_FILENO);	
-		close(output);	
+		dup2(output, STDOUT_FILENO);
+		close(output);
 	}
 	dup2(fd[0], STDIN_FILENO);
 	close(fd[1]);
@@ -68,12 +71,11 @@ void	secondchild(t_pipe *pipex, char **envp, char**args, int fd[2])
 		errcheck(pipex);
 }
 
-
 void	cmdnotfound(t_pipe *pipex)
 {
 	ft_putstr_fd("pipex: ", 2);
-	ft_putstr_fd("command not found: ", 2);
 	ft_putstr_fd(pipex->cmd1, 2);
+	ft_putstr_fd(": command not found", 2);
 	ft_putstr_fd("\n", 2);
 	exit(1);
 }

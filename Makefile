@@ -6,7 +6,7 @@
 #    By: afrigger <afrigger@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/03 12:10:58 by afrigger          #+#    #+#              #
-#    Updated: 2022/11/29 15:07:56 by afrigger         ###   ########.fr        #
+#    Updated: 2023/02/28 11:04:50 by afrigger         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ CFLAGS = -Wall -Wextra -Werror -O3 -g
 RM = rm -f
 
 DIR_H = headers/
-DIR_S =	srcs/
+DIR_S =	src/
 DIR_O =	objs/
 
 # Compile la Libft
